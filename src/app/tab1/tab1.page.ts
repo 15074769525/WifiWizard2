@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {NetworkStatus, Plugins} from '@capacitor/core';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {Platform} from '@ionic/angular';
 
 const {Network} = Plugins;
@@ -16,7 +17,7 @@ export class Tab1Page {
     wifiSsid = 'Loading...';
     wifiBssid = 'Loading...';
 
-    constructor(private platform: Platform) {
+    constructor(private platform: Platform, private geolocation: Geolocation) {
     }
 
     ionViewWillEnter() {
@@ -35,6 +36,19 @@ export class Tab1Page {
             this.wifiSsid = await WifiWizard2.getConnectedSSID();
             this.wifiBssid = await WifiWizard2.getConnectedBSSID();
         }
+        this.geolocation.getCurrentPosition({
+            maximumAge: 3000,
+            timeout: 5000,
+            enableHighAccuracy: true,
+        }).then((data) => {
+            console.log(111);
+            console.log(data.coords.latitude);
+            console.log(data.coords.longitude);
+        }, (error) => {
+            console.log(111);
+            console.log(error);
+        });
+
     }
 
 }
